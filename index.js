@@ -13,3 +13,8 @@
 //     console.log(data.toString())
 // }) //ASINCRONO
 
+// //importando modulo db
+// var db = require('./db')
+// // console.log(db)
+// db.hablar('Hola Nicoto')
+
