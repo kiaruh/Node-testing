@@ -15,16 +15,27 @@ let firstDay = () => {
 }
 greeting('Juan', firstDay)
 
-//setTimeout(() => { console.log('Dps de 3 segundos') }, 3000) //otra funcion con un callback
+//setTimeout(() => { console.log('Dps de 2 segundos') }, 2000) //otra funcion con un callback
 
 //Promises: new Promise((resolve, reject) => {codigo}) - estados de la promesa: pending, fulfilled, rejected , settled 
 //Promises: .then(function(resultado)) - .catch(function(error)) - .finally(function()) - .all(array de promesas)
 const message = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('This is my message')
-    }, 3000)
+    if(false){
+        setTimeout(() => {
+            resolve('Salio bien')
+        }, 2000)
+    }else {
+        reject('Hubo un error')
+    }
+    
 })
 
-message.then(result => {
+message
+    .then(result => {
     console.log(result)
-})
+    })
+    .catch(error => {
+    console.log(error)
+    })
+
+//Async/Await: async function(){codigo} - await promesa - .then(function(resultado)) - .catch(function(error))
