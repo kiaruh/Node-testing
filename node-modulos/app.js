@@ -35,3 +35,7 @@
 //     }
 // }) //asincrono
 
+const EventEmitter = require('events')
+const emitter = new EventEmitter()
+emitter.on('hola', (arg) => console.log('Escuchando :' + arg + ' ' + arg.id+ ' ' +arg.url ))
+emitter.emit('hola', {id:1, url:'http://www.google.com'})
