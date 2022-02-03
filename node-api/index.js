@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/users',(req, res) => {
-res.send([{id:1, nanme:'jonh'},{id:2, name:'jane'}])
+res.send(users)
 })
 
 // app.get('/api/products/:category/:name', (req, res) => {
@@ -46,10 +46,24 @@ app.post('/api/users',(req, res) => {
     }
     // if(!req.body.name || req.body.name.length < 3) //validacion
     // return res.status(400).send('Name is required and should be 3 characters long')
-
-    
 })
 
+app.put('/api/users/:id',(req, res) => {
+    let user = users.find(u => u.id === parseInt(req.params.id))
+    if(!user) return res.status(404).send('User not found')
+
+    const schema = joi.object({
+        name: joi.string().min(3).required()
+    })
+
+    const {error,value} = schema.validate({name: req.body.name})
+    if(error){
+        return res.status(400).send(error.details[0].message)
+    }
+    user.name = value.name
+    res.send(user)
+
+})
 
 //escucha el puerto con una variable de entorno
 const port = process.env.PORT || 3000
