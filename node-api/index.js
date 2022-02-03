@@ -1,4 +1,5 @@
 const express = require('express')
+const joi = require('joi')
 const app = express()
 
 const users = [{id:1 ,name: 'John'}, {id:2 ,name: 'Sara'}, {id:3 ,name: 'Karen'}]
@@ -27,15 +28,26 @@ app.get('/api/users/:id',(req, res) => {
 })
 
 app.post('/api/users',(req, res) => {
-    if(!req.body.name || req.body.name.length < 3) //validacion
-    return res.status(400).send('Name is required and should be 3 characters long')
 
-    let user = {
-        id: users.length + 1,
-        name: req.body.name
+    const schema = joi.object({
+        name: joi.string().min(3).required()
+    })
+
+    const {error,value} = schema.validate({name: req.body.name})
+    if(!error){
+        let user = {
+            id: users.length + 1,
+            name: value.name
+        }
+        users.push(user)
+        res.send(user)
+    }else{
+        res.status(400).send(error.details[0].message)
     }
-    users.push(user)
-    res.send(user)
+    // if(!req.body.name || req.body.name.length < 3) //validacion
+    // return res.status(400).send('Name is required and should be 3 characters long')
+
+    
 })
 
 
