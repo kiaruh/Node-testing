@@ -49,16 +49,21 @@ app.post('/api/users',(req, res) => {
 })
 
 app.put('/api/users/:id',(req, res) => {
-    let user = users.find(u => u.id === parseInt(req.params.id))
-    if(!user) return res.status(404).send('User not found')
+    // let user = users.find(u => u.id === parseInt(req.params.id))
+    let user = validateUser(req.params.id)
+    if(!user){
+        res.status(404).send('User not found')
+        return 
+    } 
 
     const schema = joi.object({
         name: joi.string().min(3).required()
     })
 
     const {error,value} = schema.validate({name: req.body.name})
-    if(error){
-        return res.status(400).send(error.details[0].message)
+    if(error){ 
+        res.status(400).send(error.details[0].message)
+        return
     }
     user.name = value.name
     res.send(user)
@@ -71,3 +76,8 @@ app.listen(port,()=>{
     console.log(`server on port http://localhost:${port}`)
 })
 
+
+
+function validateUser(id){
+    return users.find(u => u.id === parseInt(id))
+}
